@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Tex.PDF where
+module Main (main) where
 
 import Data.ByteString.Lazy.Char8 as B
 import Data.Maybe
@@ -8,9 +8,12 @@ import System.Exit
 
 import Test.HUnit
 import Test.Framework.Providers.HUnit
+import Test.Framework as F
 
 import System.Texrunner
 import System.Texrunner.Online
+
+main = F.defaultMain tests
 
 tests = [tex, latex, context, texOnline, latexOnline, contextOnline]
 texTests = [tex, texOnline]

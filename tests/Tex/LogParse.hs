@@ -1,6 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# OPTIONS_GHC -fno-warn-missing-signatures #-}
-module Tex.LogParse where
+module Main (main) where
 
 import Data.ByteString.Lazy.Char8 as B (unlines, ByteString, writeFile)
 import Data.Monoid
@@ -13,6 +13,8 @@ import System.Texrunner
 import System.Texrunner.Parse
 import Control.Lens
 import Data.Foldable (for_)
+
+main = F.defaultMain tests
 
 tests = texTests ++ latexTests ++ contextTests
 

@@ -18,11 +18,18 @@ category:            System
 build-type:          Simple
 extra-source-files:  README.md, CHANGELOG.md
 cabal-version:       >=1.10
-tested-with: GHC==7.8.4, GHC==7.10.3, GHC==8.0.2, GHC==8.2.2, GHC==8.4.3, GHC==8.6.1
+tested-with: GHC==7.8.4, GHC==7.10.3, GHC==8.0.2, GHC==8.2.2, GHC==8.4.3, GHC==8.6.3
+
+extra-source-files: tests/Tex/*.hs
 
 source-repository head
   type:     git
   location: http://github.com/cchalmers/texrunner
+
+flag test-with-tex
+  description: Enable test suites that only work if LaTeX is installed
+  default: False
+  manual: True
 
 library
   exposed-modules:
@@ -44,12 +51,17 @@ library
   ghc-options:        -Wall
   default-language:    Haskell2010
 
-test-suite tests
-  type:           exitcode-stdio-1.0
-  hs-source-dirs: tests
-  main-is:        Tests.hs
-  other-modules:  Tex.PDF, Tex.LogParse
-  ghc-options:    -Wall
+test-suite logparse
+
+  if flag(test-with-tex)
+    type: exitcode-stdio-1.0
+    main-is: LogParse.hs
+  else
+    type: exitcode-stdio-1.0
+    main-is: LogParse-skip.hs
+
+  hs-source-dirs: tests/Tex
+  ghc-options: -Wall
   default-language: Haskell2010
 
   build-depends:
@@ -61,3 +73,23 @@ test-suite tests
     bytestring,
     texrunner
 
+test-suite pdf
+
+  if flag(test-with-tex)
+    type: exitcode-stdio-1.0
+    main-is: PDF.hs
+  else
+    type: exitcode-stdio-1.0
+    main-is: PDF-skip.hs
+
+  hs-source-dirs: tests/Tex
+  ghc-options: -Wall
+  default-language: Haskell2010
+
+  build-depends:
+    base,
+    test-framework,
+    test-framework-hunit,
+    HUnit,
+    bytestring,
+    texrunner

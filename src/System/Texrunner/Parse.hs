@@ -221,6 +221,7 @@ toBeReadAgain = do
 undefinedControlSequence :: Parser TexError
 undefinedControlSequence = do
   _ <- "Undefined control sequence"
+  _ <- optional (char '.')
 
   _ <- optional $ do -- for context log
     skipSpace
@@ -244,6 +245,7 @@ finalControlSequence = last <$> many1 controlSequence
 illegalUnit :: Parser TexError
 illegalUnit = do
   _ <- "Illegal unit of measure (pt inserted)"
+  _ <- optional (char '.')
   _ <- optional toBeReadAgain
   _ <- optional toBeReadAgain
 
@@ -252,6 +254,7 @@ illegalUnit = do
 missingNumber :: Parser TexError
 missingNumber = do
   _ <- "Missing number, treated as zero"
+  _ <- optional (char '.')
   _ <- optional toBeReadAgain
   _ <- optional noteStar
   return $ TexError Nothing MissingNumber
@@ -266,6 +269,7 @@ badBox = do
 missing :: Parser TexError
 missing = do
   c <- "Missing " *> anyChar <* " inserted"
+  _ <- optional (char '.')
   l <- optional line
   return $ TexError l (Missing c)
 
